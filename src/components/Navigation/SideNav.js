@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import authStore from "../../stores/authStore";
+import channelStore from "../../stores/channelStore"
+import { observer } from "mobx-react";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,10 +21,12 @@ class SideNav extends React.Component {
     this.state = { collapsed: false };
   }
 
+  
   render() {
-    const channelLinks = [{ name: "all" }].map(channel => (
+    const channelLinks = channelStore.channels.map(channel => (
       <ChannelNavLink key={channel.name} channel={channel} />
     ));
+    
     return (
       <div>
         <ul className="navbar-nav navbar-sidenav" id="exampleAccordion">
@@ -31,7 +36,8 @@ class SideNav extends React.Component {
               <FontAwesomeIcon icon={faPlusCircle} />
             </Link>
           </li>
-          {channelLinks}
+         <div>{authStore.isLoggedIn ? channelLinks : <p>NOT ALLOWED</p>}</div>
+          
         </ul>
         <ul className="navbar-nav sidenav-toggler">
           <li className="nav-item">
@@ -55,4 +61,4 @@ class SideNav extends React.Component {
   }
 }
 
-export default SideNav;
+export default observer(SideNav);
